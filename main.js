@@ -6,7 +6,7 @@ const hihatPlayer = document.getElementById('hihat');
 const midiVisual = document.getElementById('midi-visual');
 const lyricsDisplay = document.getElementById('lyrics-display');
 
-const COLAB_URL = "https://<your-ngrok-subdomain>.ngrok.io"; // Colab endpoint
+const COLAB_URL = "https://alba-artiest-raelene.ngrok-free.dev/process"; // Colab endpoint
 
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
