@@ -1,28 +1,25 @@
-// Example: fetch processed files from backend
-fetch('/process')   // endpoint in FastAPI/Flask server that runs pipeline
-  .then(res => res.json())
-  .then(files => {
-      // Update audio sources
-      document.getElementById('vocals').src = files.vocals;
-      document.getElementById('kick').src = files.kick;
-      document.getElementById('snare').src = files.snare;
-      document.getElementById('hihat').src = files.hihat;
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      // Load MIDI
-      fetch(files.midi)
-        .then(resp => resp.arrayBuffer())
-        .then(arrayBuffer => {
-            console.log('MIDI loaded:', arrayBuffer.byteLength, 'bytes');
-            // parse and render MIDI visualization here
-        });
+    const formData = new FormData();
+    formData.append('song', document.getElementById('songInput').files[0]);
+    const lyricsFile = document.getElementById('lyricsInput').files[0];
+    if (lyricsFile) formData.append('lyrics', lyricsFile);
 
-      // Load lyrics if available
-      if (files.lyrics) {
-          fetch(files.lyrics)
-            .then(resp => resp.json())
-            .then(lyricsJson => {
-                console.log('Lyrics loaded:', lyricsJson);
-                // render karaoke follow-along here
-            });
-      }
-  });
+    // Send to backend for processing
+    const response = await fetch('/process', { method: 'POST', body: formData });
+    const files = await response.json(); // {vocals: "...", kick: "...", snare: "...", hihat: "...", midi: "...", lyrics: "..."}
+
+    // Update audio and MIDI sources dynamically
+    document.getElementById('vocals').src = files.vocals;
+    document.getElementById('kick').src = files.kick;
+    document.getElementById('snare').src = files.snare;
+    document.getElementById('hihat').src = files.hihat;
+
+    fetch(files.midi)
+      .then(res => res.arrayBuffer())
+      .then(arrayBuffer => {
+          console.log('MIDI loaded:', arrayBuffer.byteLength, 'bytes');
+          // render MIDI visualization
+      });
+});
