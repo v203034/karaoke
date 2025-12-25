@@ -15,7 +15,7 @@ uploadForm.addEventListener('submit', async (e) => {
     if (lyricsFile) formData.append('lyrics', lyricsFile);
 
     // Use the ngrok URL printed by Colab
-    const NGROK_URL = "PASTE_YOUR_PUBLIC_URL_HERE";
+    const NGROK_URL = "https://alba-artiest-raelene.ngrok-free.dev";
 
     const response = await fetch(`${NGROK_URL}/process`, {
         method: 'POST',
